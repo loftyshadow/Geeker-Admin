@@ -2,52 +2,70 @@ import { defineStore } from "pinia";
 import { GlobalState } from "@/stores/interface";
 import { DEFAULT_PRIMARY } from "@/config";
 import piniaPersistConfig from "@/stores/helper/persist";
+import { ref } from "vue";
 
-export const useGlobalStore = defineStore({
-  id: "geeker-global",
-  // 修改默认值之后，需清除 localStorage 数据
-  state: (): GlobalState => ({
+export const useGlobalStore = defineStore(
+  "geeker-global",
+  () => {
+    // 修改默认值之后，需清除 localStorage 数据
     // 布局模式 (纵向：vertical | 经典：classic | 横向：transverse | 分栏：columns)
-    layout: "vertical",
+    let layout = ref("vertical");
     // element 组件大小
-    assemblySize: "default",
+    let assemblySize = ref("default");
     // 当前系统语言
-    language: null,
+    let language = ref(null);
     // 当前页面是否全屏
-    maximize: false,
+    let maximize = ref(false);
     // 主题颜色
-    primary: DEFAULT_PRIMARY,
+    let primary = ref(DEFAULT_PRIMARY);
     // 深色模式
-    isDark: false,
+    let isDark = ref(false);
     // 灰色模式
-    isGrey: false,
+    let isGrey = ref(false);
     // 色弱模式
-    isWeak: false,
+    let isWeak = ref(false);
     // 侧边栏反转
-    asideInverted: false,
+    let asideInverted = ref(false);
     // 头部反转
-    headerInverted: false,
+    let headerInverted = ref(false);
     // 折叠菜单
-    isCollapse: false,
+    let isCollapse = ref(false);
     // 菜单手风琴
-    accordion: true,
+    let accordion = ref(true);
     // 面包屑导航
-    breadcrumb: true,
+    let breadcrumb = ref(true);
     // 面包屑导航图标
-    breadcrumbIcon: true,
+    let breadcrumbIcon = ref(true);
     // 标签页
-    tabs: true,
+    let tabs = ref(true);
     // 标签页图标
-    tabsIcon: true,
+    let tabsIcon = ref(true);
     // 页脚
-    footer: true
-  }),
-  getters: {},
-  actions: {
+    let footer = ref(true);
     // Set GlobalState
-    setGlobalState(...args: ObjToKeyValArray<GlobalState>) {
+    function setGlobalState(...args: ObjToKeyValArray<GlobalState>) {
       this.$patch({ [args[0]]: args[1] });
     }
+    return {
+      layout,
+      assemblySize,
+      language,
+      maximize,
+      primary,
+      isDark,
+      isGrey,
+      isWeak,
+      asideInverted,
+      headerInverted,
+      isCollapse,
+      accordion,
+      breadcrumb,
+      breadcrumbIcon,
+      tabs,
+      tabsIcon,
+      footer,
+      setGlobalState
+    };
   },
-  persist: piniaPersistConfig("geeker-global")
-});
+  { persist: piniaPersistConfig("geeker-global") }
+);

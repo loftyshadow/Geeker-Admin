@@ -1,23 +1,23 @@
 import { defineStore } from "pinia";
 import { UserState } from "@/stores/interface";
 import piniaPersistConfig from "@/stores/helper/persist";
+import { ref } from "vue";
 
-export const useUserStore = defineStore({
-  id: "geeker-user",
-  state: (): UserState => ({
-    token: "",
-    userInfo: { name: "Geeker" }
-  }),
-  getters: {},
-  actions: {
+export const useUserStore = defineStore(
+  "geeker-user",
+  () => {
+    const token = ref("");
+    const userInfo = ref({ name: "Geeker" });
     // Set Token
-    setToken(token: string) {
-      this.token = token;
-    },
-    // Set setUserInfo
-    setUserInfo(userInfo: UserState["userInfo"]) {
-      this.userInfo = userInfo;
+    function setToken(newToken: string): void {
+      token.value = newToken;
     }
+    // Set setUserInfo
+    function setUserInfo(newUserInfo: UserState["userInfo"]) {
+      userInfo.value = newUserInfo;
+    }
+
+    return { token, userInfo, setToken, setUserInfo };
   },
-  persist: piniaPersistConfig("geeker-user")
-});
+  { persist: piniaPersistConfig("geeker-user") }
+);
