@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
-    <el-form-item prop="username">
-      <el-input v-model="loginForm.username" placeholder="用户名：admin / user">
+    <el-form-item prop="userName">
+      <el-input v-model="loginForm.userName" placeholder="用户名：admin / user">
         <template #prefix>
           <el-icon class="el-input__icon">
             <user />
@@ -51,14 +51,14 @@ const keepAliveStore = useKeepAliveStore();
 type FormInstance = InstanceType<typeof ElForm>;
 const loginFormRef = ref<FormInstance>();
 const loginRules = reactive({
-  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  userName: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }]
 });
 
 const loading = ref(false);
 const loginForm = reactive<Login.ReqLoginForm>({
-  username: "",
-  password: ""
+  userName: "admin",
+  password: "admin"
 });
 
 // login
@@ -69,8 +69,8 @@ const login = (formEl: FormInstance | undefined) => {
     loading.value = true;
     try {
       // 1.执行登录接口
-      const { data } = await loginApi({ ...loginForm, password: md5(loginForm.password) });
-      userStore.setToken(data.access_token);
+      const { data } = await loginApi({ userName: loginForm.userName, password: md5(loginForm.password) });
+      userStore.setToken(data.token);
 
       // 2.添加动态路由
       await initDynamicRouter();
@@ -83,7 +83,7 @@ const login = (formEl: FormInstance | undefined) => {
       router.push(HOME_URL);
       ElNotification({
         title: getTimeState(),
-        message: "欢迎登录 Geeker-Admin",
+        message: "欢迎登录 Map",
         type: "success",
         duration: 3000
       });
